@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>Task Tracker</title>
+    </head>
+    <body  class="container">
+    <h1><a th:href="@{/}"><<</a>&nbsp Task Info</h1>
+        <br>
+        <!--/*@thymesVar id="task" type="Task"*/-->
+        <span th:text="'Number: ' + ${task.id}" />
+        <br>
+        <span th:text="'Title: ' + ${task.name}" />
+        <br>
+        <span th:text="'Creator: ' + ${task.creator}" />
+        <br>
+        <span th:text="'Assignee: ' + ${task.assignee}" />
+        <br>
+        <span th:text="'Status: ' + ${task.status}" />
+        <br>
+        <span th:text="'Description: ' + ${task.description}" />
+        <a th:href="@{/}">на Главную страницу</a>
+    </body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Task Tracker</title>
+</head>
+
+<body  class="container">
+    <h1><a th:href="@{/}"><<</a>&nbsp Task List</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Title</th>
+            <th scope="col">Creator</th>
+            <th scope="col">Assignee</th>
+            <th scope="col">Status</th>
+            <th scope="col">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--/*@thymesVar id="tasks" type="java.util.List<Task>"*/-->
+        <tr th:each="t : ${tasks}">
+            <th scope="row" th:text="${t.id}"></th>
+            <td th:text="${t.name}"></td>
+            <td th:text="${t.creator}"></td>
+            <td th:text="${t.Assignee}"></td>
+            <td th:text="${t.status.toString()}"></td>
+            <td th:text="${t.description}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
