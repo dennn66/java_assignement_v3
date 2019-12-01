@@ -20,10 +20,21 @@ public class TaskService {
     public List<Task> getAllTasks() {
         return taskRepository.findAll();
     }
+    public List<Task> findTasks(String creatorFilter, String statusFilter) {
+        if(!creatorFilter.equals("")) return taskRepository.findByCreator(creatorFilter);
+        if(!statusFilter.equals("ALL")) return taskRepository.findByStatus(statusFilter);
+        return taskRepository.findAll();
+    }
 
     public void insert(Task task) {
-        task.setStatus(Task.Status.CREATED);
+        task.setStatus(Task.Status.OPEN);
         taskRepository.insert(task);
+    }
+    public void delete(Task task) {
+        taskRepository.remove(task);
+    }
+    public void update(Task task) {
+        taskRepository.update(task);
     }
 
     public Optional<Task> findById(Long id) {

@@ -1,9 +1,6 @@
 package com.dennn66.tasktracker.repositories;
 
 import com.dennn66.tasktracker.entities.Task;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -19,12 +16,23 @@ public class TaskRepository {
     private EntityManager entityManager;
 
     public Task findById(Long id) {
-        Task task = entityManager.getReference(Task.class, id);
-        return task;
+        return entityManager.getReference(Task.class, id);
     }
 
     public List<Task> findAll() {
         List<Task> tasks = entityManager.createQuery("SELECT i FROM Task i").getResultList();
+        return tasks;
+    }
+
+    public List<Task> findByStatus(String status) {
+        List<Task> tasks = entityManager.createQuery("SELECT i FROM Task i WHERE status = ?1").
+                setParameter(1, Task.Status.valueOf(status)).getResultList();
+        return tasks;
+    }
+    public List<Task> findByCreator(String creator) {
+        List<Task> tasks = entityManager.
+                createQuery("SELECT i FROM Task i WHERE creator LIKE ?1").
+                setParameter(1, creator).getResultList();
         return tasks;
     }
 
@@ -33,11 +41,15 @@ public class TaskRepository {
     }
 
     public void update(Task task) {
-        entityManager.persist(task);
+        entityManager.merge(task);
+    }
+
+    public void remove(Task task) {
+        entityManager.remove(entityManager.find(Task.class, task.getId()));
     }
 
     public Optional<Task> findOneById(Long id) {
-        Task task = entityManager.getReference(Task.class, id);
+        Task task = entityManager.find(Task.class, id);
         if(task == null) return Optional.empty();
         return Optional.of(task);
     }

@@ -7,9 +7,9 @@
         <title>Task Tracker</title>
     </head>
     <body  class="container">
-        <h1><a th:href="@{/}"><<</a>&nbsp Add Task</h1>
+        <h1>Add Task</h1>
         <!--/*@thymesVar id="task" type="Task"*/-->
-        <form th:action="@{/tasks/process_form}" th:object="${task}" method="POST">
+        <form th:action="@{/task/process_form}" th:object="${task}" method="POST">
             <div class="form-group">
             Title: <input class="form-control"  th:field="*{name}"/>
             </div>
@@ -23,7 +23,8 @@
             Assignee: <input class="form-control"  th:field="*{assignee}"/>
             </div>
             <div class="form-group">
-            <input type="submit" value="Submit" class="btn btn-default"/>
+                <input type="submit" name="action" value="Add" class="btn btn-primary"/>
+                <input type="submit" name="action" value="Cancel" class="btn btn-default"/>
             </div>
         </form>
     </body>

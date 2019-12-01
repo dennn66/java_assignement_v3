@@ -2,7 +2,6 @@ package com.dennn66.tasktracker.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -34,7 +33,7 @@ public class Task implements Serializable, Comparable<Task>{
     }
 
     public enum Status {
-        CREATED("Открыта", 1), INPROGRESS("В работе", 2), COMPLETED("Завершена", 3);
+        OPEN("Open", 1), INPROGRESS("In Progress", 2), COMPLETED("Completed", 3);
         String name;
         int priority;
 
@@ -42,10 +41,19 @@ public class Task implements Serializable, Comparable<Task>{
             this.name = name;
             this.priority = priority;
         }
+        public String getDisplayValue() {
+            return name;
+        }
+    }
+    public enum Filter {
+        ALL("All"), OPEN("Open"), INPROGRESS("In Progress"), COMPLETED("Completed");
+        String name;
 
-        @Override
-        public String toString() {
-            return "'" + name + "'";
+        Filter(String name) {
+            this.name = name;
+        }
+        public String getDisplayValue() {
+            return name;
         }
     }
 
@@ -61,7 +69,7 @@ public class Task implements Serializable, Comparable<Task>{
         this.creator = creator;
         this.description = description;
         assignee = "";
-        status = Status.CREATED;
+        status = Status.OPEN;
     }
 
 
