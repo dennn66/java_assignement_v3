@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Task Tracker</title>
+</head>
+<body  class="container">
+<h1>Task Details</h1>
+<!--/*@thymesVar id="task" type="Task"*/-->
+<form th:action="@{/task/process_form}" th:object="${task}" method="POST">
+    <div class="form-group">
+        #: <input class="form-control"  th:field="*{id}" readonly/>
+    </div>   <div class="form-group">
+        Title: <input class="form-control"  th:field="*{name}"/>
+    </div>
+    <div class="form-group">
+        Description: <input class="form-control"  th:field="*{description}"/>
+    </div>
+    <div class="form-group">
+        Creator: <input class="form-control"  th:field="*{creator}"/>
+    </div>
+    <div class="form-group">
+        Assignee: <input class="form-control"  th:field="*{assignee}"/>
+    </div>
+    <div class="form-group">
+<!--        Status: <input class="form-control"  th:field="*{status}" readonly/>-->
+<!--        <select  name = "stat" class="form-control">-->
+<!--            <option th:text="*{status}" selected></option>-->
+<!--            <option th:each="status : ${T(com.dennn66.tasktracker.entities.Task.Status).values()}"-->
+<!--                    th:value="${status}"-->
+<!--                    th:text="${status.displayValue}">-->
+<!--            </option>-->
+<!--        </select>-->
+        <select  name = "stat" class="form-control" th:field="*{status}">
+            <option th:each="status : ${T(com.dennn66.tasktracker.entities.Task.Status).values()}"
+                    th:value="${status}"
+                    th:text="${status.displayValue}">
+            </option>
+        </select>
+    </div>
+    <div class="form-group">
+        <div  class="row">
+            <div class="bg-white col-md-1">
+                <input type="submit" name="action" value="Update" class="btn btn-primary"/>
+            </div>
+            <div class="bg-white col-md-1">
+                <input type="submit" name="action" value="Cancel" class="btn btn-default"/>
+            </div>
+            <div class="bg-white col-md">
+            </div>
+            <div class="bg-white col-md-2">
+                <input type="submit" name="action" value="Delete" class="btn btn-danger"/>
+            </div>
+        </div>
+    </div>
+</form>
+</body>
+</html>
