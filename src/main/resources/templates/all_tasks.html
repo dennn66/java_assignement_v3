@@ -9,89 +9,94 @@
 </head>
 
 <body  class="container">
-    <h1>Task List</h1>
-
     <div class="container">
         <div  class="row">
-            <div class="bg-white col-md-5">
-                <form th:action="@{/task/show?creatorFilter=${creatorFilter}}">
-                    <div class="bg-white col-md">
-                        Creator:
-                    </div>
-                    <div  class="row">
-                        <div class="bg-white col-md">
-                            <input class="form-control"
-                                   type="text"
-                                   th:value="${creatorFilter}" id="creatorFilter" name="creatorFilter"
-                                    />
-                        </div>
-                        <div class="bg-white col-md-4">
-                            <input type="submit" value="Filter" class="btn btn-primary"/>
-                        </div>
-                        <div class="bg-white col-md">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="bg-white col-md-5">
-                <form th:action="@{/task/show}">
-                    <div class="bg-white col-md-1">
-                        Status:
-                    </div>
-                    <div  class="row">
-                        <div class="bg-white col-md">
-                            <select  class="form-control" name = "statusFilter" >
-                                <option th:each="status : ${T(com.dennn66.tasktracker.entities.Task.Filter).values()}"
-                                        th:value="${status}"
-                                        th:text="${status.displayValue}"
-                                        th:selected="${status  == T(com.dennn66.tasktracker.entities.Task.Filter).valueOf(statusFilter)}">
-                                </option>
-                            </select>
-                        </div>
-                        <div class="bg-white col-md-4">
-                            <input type="submit"  value="Filter" class="btn btn-primary"/>
-                        </div>
-                        <div class="bg-white col-md">
-                        </div>
-                    </div>
-                </form>
+            <div class="bg-white col-md-3">
             </div>
             <div class="bg-white col-md">
-                <label></label>
+                <h1>Task List</h1>
             </div>
             <div class="bg-white col-md-1">
                 <form th:action="@{/task/add}">
                     <input type="submit" name="action" value="Add" class="btn btn-primary"/>
                 </form>
             </div>
-<!--            <div class="bg-info col-md-1">-->
-<!--                <a th:href="@{/task/add}">Add Task</a>-->
-<!--            </div>-->
+        </div>
+        <div  class="row">
+            <div class="bg-white col-md-3">
+                <form th:action="@{/task/show?creatorFilter=${creatorFilter}}">
+                    <div class="bg-white">
+                        Creator:
+                    </div>
+                    <div class="bg-white">
+                        <input class="form-control"
+                               type="text"
+                               th:value="${creatorFilter}" id="creatorFilter" name="creatorFilter"
+                               th:placeholder="creator"
+                        />
+                    </div>
+                    <div class="bg-white">
+                        Summary:
+                    </div>
+                    <div class="bg-white">
+                        <input class="form-control"
+                               type="text"
+                               th:value="${nameFilter}" id="nameFilter" name="nameFilter"
+                               th:placeholder="summary"
+                        />
+                    </div>
+                    <div class="bg-white">
+                        Status:
+                    </div>
+                    <div class="bg-white">
+                        <select  class="form-control" name = "statusFilter" >
+                            <option th:each="status : ${T(com.dennn66.tasktracker.entities.Task.Filter).values()}"
+                                    th:value="${status}"
+                                    th:text="${status.displayValue}"
+                                    th:selected="${status  == T(com.dennn66.tasktracker.entities.Task.Filter).valueOf(statusFilter)}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="bg-white">
+                        <input type="submit" value="Filter" class="btn btn-primary"/>
+                    </div>
+                </form>
+            </div>
+            <div class="bg-white col-md">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Creator</th>
+                        <th scope="col">Assignee</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--/*@thymesVar id="tasks" type="java.util.List<Task>"*/-->
+                    <tr th:each="t : ${tasksPage.getContent()}">
+                        <th scope="row" th:text="${t.id}"></th>
+                        <td><a th:href="@{/task/{taskId}/details(taskId=${t.id})}"  th:text="${t.name}"></a></td>
+                        <td th:text="${t.creator}"></td>
+                        <td th:text="${t.Assignee}"></td>
+                        <td th:text="${t.status.getDisplayValue()}"></td>
+                        <td th:text="${t.description}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li class="page-item" th:classappend="${tasksPage.getNumber() + 1 == i ? 'active' : ''}"
+                            th:each="i : ${#numbers.sequence(1, tasksPage.getTotalPages())}">
+                            <a th:class="page-link" th:text="${i}" th:href="@{'/task/show/?pageNumber=' + ${i}}"></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Title</th>
-            <th scope="col">Creator</th>
-            <th scope="col">Assignee</th>
-            <th scope="col">Status</th>
-            <th scope="col">Description</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!--/*@thymesVar id="tasks" type="java.util.List<Task>"*/-->
-        <tr th:each="t : ${tasks}">
-            <th scope="row" th:text="${t.id}"></th>
-            <td><a th:href="@{/task/{taskId}/details(taskId=${t.id})}"  th:text="${t.name}"></a></td>
-            <td th:text="${t.creator}"></td>
-            <td th:text="${t.Assignee}"></td>
-            <td th:text="${t.status.getDisplayValue()}"></td>
-            <td th:text="${t.description}"></td>
-        </tr>
-        </tbody>
-    </table>
-
 </body>
 </html>

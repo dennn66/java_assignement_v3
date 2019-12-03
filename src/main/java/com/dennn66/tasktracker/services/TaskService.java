@@ -3,6 +3,9 @@ package com.dennn66.tasktracker.services;
 import com.dennn66.tasktracker.entities.Task;
 import com.dennn66.tasktracker.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,27 +20,17 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public List<Task> getAllTasks() {
-        return taskRepository.findAll();
-    }
-    public List<Task> findTasks(String creatorFilter, String statusFilter) {
-        if(!creatorFilter.equals("")) return taskRepository.findByCreator(creatorFilter);
-        if(!statusFilter.equals("ALL")) return taskRepository.findByStatus(statusFilter);
-        return taskRepository.findAll();
+    public Page<Task> getAllTasks(Specification<Task> spec, Pageable pageable) {
+        return taskRepository.findAll(spec, pageable);
     }
 
     public void insert(Task task) {
         task.setStatus(Task.Status.OPEN);
-        taskRepository.insert(task);
+        taskRepository.save(task);
     }
     public void delete(Task task) {
-        taskRepository.remove(task);
+        taskRepository.delete(task);
     }
-    public void update(Task task) {
-        taskRepository.update(task);
-    }
-
-    public Optional<Task> findById(Long id) {
-        return taskRepository.findOneById(id);
-    }
+    public void update(Task task) {taskRepository.save(task);}
+    public Optional<Task> findById(Long id) {return taskRepository.findById(id);}
 }

@@ -1,8 +1,13 @@
 package com.dennn66.tasktracker.controllers;
 
 import com.dennn66.tasktracker.entities.Task;
+import com.dennn66.tasktracker.repositories.specifications.TaskSpecifications;
 import com.dennn66.tasktracker.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,13 +30,35 @@ public class TaskController {
     // http://localhost:8189/app/tasks/show?creatorFilter=ddd&statusFilter=Открыта
     @RequestMapping(path = "/show", method = RequestMethod.GET)
     public String showAllTasks(
+            Model model,
+            @RequestParam(defaultValue = "1") Long pageNumber,
+            @RequestParam(value = "nameFilter", required = false, defaultValue="") String nameFilter,
             @RequestParam(value = "creatorFilter", required = false, defaultValue="") String creatorFilter,
-            @RequestParam(value = "statusFilter", required = false, defaultValue="ALL") String statusFilter,
-            Model model) {
-        List<Task> tasks = taskService.findTasks(creatorFilter, statusFilter);
+            @RequestParam(value = "statusFilter", required = false, defaultValue="ALL") String statusFilter
+    ) {
+        int tasksPerPage = 5;
+        if (pageNumber < 1L) {
+            pageNumber = 1L;
+        }
+        Specification<Task> spec = Specification.where(null);
+        if (!creatorFilter.equals("")) {
+            spec = spec.and(TaskSpecifications.creatorContains(creatorFilter));
+        }
+        if (!nameFilter.equals("")) {
+            spec = spec.and(TaskSpecifications.nameContains(nameFilter));
+        }
+        if (!statusFilter.equals("ALL")) {
+            spec = spec.and(TaskSpecifications.statusEqual(Task.Status.valueOf(statusFilter)));
+        }
+        Page<Task> tasksPage = taskService.getAllTasks(spec, PageRequest.of(
+                pageNumber.intValue() - 1,
+                tasksPerPage,
+                Sort.Direction.ASC,
+                "id"));
+        model.addAttribute("tasksPage", tasksPage);
         model.addAttribute("statusFilter", statusFilter);
         model.addAttribute("creatorFilter", creatorFilter);
-        model.addAttribute("tasks", tasks);
+        model.addAttribute("nameFilter", nameFilter);
         return "all_tasks";
     }
 

@@ -20,10 +20,13 @@ public class Task implements Serializable, Comparable<Task>{
     private String name;// название,
     @Column(name = "creator")
     private String creator;// имя владельца задачи,
+
     @Column(name = "assignee")
     private String assignee; // имя исполнителя,
+
     @Column(name = "description")
     private String description; // описание,
+
     @Column(name = "status")
     private Status status; // статус
 
