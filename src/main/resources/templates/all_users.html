@@ -14,35 +14,25 @@
             <div class="bg-white col-md-3">
             </div>
             <div class="bg-white col-md">
-                <h1>Task List</h1>
+                <h1>User Admin</h1>
             </div>
             <div class="bg-white col-md-1">
-                <form th:action="@{/task/add}">
+                <form th:action="@{/user/add}">
                     <input type="submit" name="action" value="Add" class="btn btn-primary"/>
                 </form>
             </div>
         </div>
         <div  class="row">
             <div class="bg-white col-md-3">
-                <form th:action="@{/tasks}">
+                <form th:action="@{/users}">
                     <div class="bg-white">
-                        Creator:
-                    </div>
-                    <div class="bg-white">
-                        <input class="form-control"
-                               type="text"
-                               th:value="${creatorFilter}" id="creatorFilter" name="creatorFilter"
-                               th:placeholder="creator"
-                        />
-                    </div>
-                    <div class="bg-white">
-                        Title:
+                        Name:
                     </div>
                     <div class="bg-white">
                         <input class="form-control"
                                type="text"
                                th:value="${nameFilter}" id="nameFilter" name="nameFilter"
-                               th:placeholder="title"
+                               th:placeholder="name"
                         />
                     </div>
                     <div class="bg-white">
@@ -50,10 +40,10 @@
                     </div>
                     <div class="bg-white">
                         <select  class="form-control" name = "statusFilter" >
-                            <option th:each="status : ${T(com.dennn66.tasktracker.entities.Task.Filter).values()}"
+                            <option th:each="status : ${T(com.dennn66.tasktracker.entities.User.Filter).values()}"
                                     th:value="${status}"
                                     th:text="${status.displayValue}"
-                                    th:selected="${status  == T(com.dennn66.tasktracker.entities.Task.Filter).valueOf((statusFilter == 'null' || statusFilter == null)? 'ALL': statusFilter)}">
+                                    th:selected="${status  == T(com.dennn66.tasktracker.entities.User.Filter).valueOf((statusFilter == 'null' || statusFilter == null)? 'ALL': statusFilter)}">
                             </option>
                         </select>
                     </div>
@@ -67,35 +57,31 @@
                     <thead>
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Creator</th>
-                        <th scope="col">Assignee</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">E-Mail</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Description</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="t : ${tasksPage.getContent()}">
-                        <th scope="row" th:text="${t.id}"></th>
-                        <td><a th:href="@{/task/{taskId}/details(taskId=${t.id})}"  th:text="${t.name}"></a></td>
-                        <td th:text="${t.creator}"></td>
-                        <td th:text="${t.Assignee}"></td>
-                        <td th:text="${t.status.getDisplayValue()}"></td>
-                        <td th:text="${t.description}"></td>
+                    <tr th:each="u : ${usersPage.getContent()}">
+                        <th scope="row" th:text="${u.id}"></th>
+                        <td><a th:href="@{/user/{userId}/details(userId=${u.id})}"  th:text="${u.name}"></a></td>
+                        <td th:text="${u.email}"></td>
+                        <td th:text="${u.status.getDisplayValue()}"></td>
                     </tr>
                     </tbody>
                 </table>
 
                 <nav aria-label="Page navigation">
                     <ul class="pagination">
-                        <li class="page-item" th:classappend="${tasksPage.getNumber() + 1 == i ? 'active' : ''}"
-                            th:each="i : ${#numbers.sequence(1, (tasksPage.getTotalPages() > 0)?tasksPage.getTotalPages():1)}">
+                        <li class="page-item" th:classappend="${usersPage.getNumber() + 1 == i ? 'active' : ''}"
+                            th:each="i : ${#numbers.sequence(1, (usersPage.getTotalPages() > 0)?usersPage.getTotalPages():1)}">
                             <a th:class="page-link" th:text="${i}"
-                               th:href="@{'/tasks?pageNumber=' + ${i} +
-                                '&creatorFilter=' + ${creatorFilter} +
+                               th:href="@{'/users/?pageNumber=' + ${i} +
                                 '&statusFilter=' + ${statusFilter} +
                                 '&nameFilter=' + ${nameFilter}
-                                }"></a>
+
+                               }"></a>
                         </li>
                     </ul>
                 </nav>

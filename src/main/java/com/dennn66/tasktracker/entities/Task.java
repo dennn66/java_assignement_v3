@@ -18,11 +18,14 @@ public class Task implements Serializable, Comparable<Task>{
     private Long id;//id,
     @Column(name = "name")
     private String name;// название,
-    @Column(name = "creator")
-    private String creator;// имя владельца задачи,
 
-    @Column(name = "assignee")
-    private String assignee; // имя исполнителя,
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "creator")
+    private User creator;// имя владельца задачи,
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "assignee")
+    private User assignee; // имя исполнителя,
 
     @Column(name = "description")
     private String description; // описание,
@@ -60,22 +63,6 @@ public class Task implements Serializable, Comparable<Task>{
         }
     }
 
-    public Task(String name, String creator, String assignee, String description, Status status) {
-        this.name = name;
-        this.creator = creator;
-        this.assignee = assignee;
-        this.description = description;
-        this.status = status;
-}
-    public Task(String name, String creator, String description) {
-        this.name = name;
-        this.creator = creator;
-        this.description = description;
-        assignee = "";
-        status = Status.OPEN;
-    }
-
-
     @Override
     public String toString() {
         StringBuilder TaskString = new StringBuilder();
@@ -86,8 +73,6 @@ public class Task implements Serializable, Comparable<Task>{
                 append(" author:").append(creator).
                 append(" description: ").append(description).toString();
     }
-
-    public void info(){  System.out.println(this); }
 
     @Override
     public boolean equals(Object obj) {
